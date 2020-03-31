@@ -1,0 +1,63 @@
+#home{
+    background-image: url('../../assets/img/background.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: space-around;
+    width: 100vw;
+    height: 100vh;
+
+    section{
+        background-color: rgba(0, 0, 0, 0.7);
+        padding-left: $md;
+        padding-right: $md;
+        height: 80%;
+        width: 35%;
+    }
+
+    .cube{
+        font-size: 8rem;
+        color: $spray;
+
+    }
+
+    h1{
+        text-align: center;
+        color: $off-white;
+        font-size: $lg;
+    }
+
+    .play-button-container{
+        width: $full;
+    }
+
+    a.play-button{
+        background-color: $green;
+        color: $off-white;
+        cursor: pointer;
+        padding: $normal;
+    }
+
+    .auth-container{
+        width: $full;
+        display: flex;
+        justify-content: space-around;
+    }
+
+    #login-button {
+        background-color: $tomato;
+    }
+
+    #signup-button {
+        background-color: $green;
+    }
+
+    .auth-container .auth-buttons {
+        color: $off-white;
+        cursor: pointer;
+        border-radius: 30px;
+        text-align: center;
+        padding: $normal 0;
+        width: 45;
+    }
+}
