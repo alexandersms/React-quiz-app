@@ -3,6 +3,7 @@ $spray: #82ccdd;
 $off-white: #c8d6e5;
 $green: #079992;
 $tomato: #eb2f06;
+$blue: #0a3d62;
 
 // Sizes
 $xs: 0.5rem;
@@ -13,3 +14,15 @@ $lg: 3rem;
 $xlg: 5rem;
 $xxlg: 7rem;
 $full: 100%;
+
+//Button radius
+$button-raduis: 30px;
+
+//Breakpoints
+$lg-breakpoint: 1024px;
+$md-breakpoint: 768px;
+$sm-breakpoint: 641px;
+$xs-breakpoint: 480px;
+
+// Shadow
+$shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)
