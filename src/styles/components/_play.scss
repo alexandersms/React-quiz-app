@@ -94,3 +94,17 @@
         background-color: darken($tomato, 10%);
     }
 }
+
+.toast-valid {
+    background-color: $green !important;
+    border-radius: 5px !important;
+    color: $white !important;
+    font-weight: 600;
+}
+
+.toast-invalid {
+    background-color: $tomato !important;
+    border-radius: 5px !important;
+    color: $white !important;
+    font-weight: 600;
+}

@@ -1,10 +1,12 @@
 import React, { Component, Fragment } from "react";
 import { Helmet } from "react-helmet";
+import M from "materialize-css";
 import questions from "../../questions.json";
+import isEmpty from "../../utils/is-empty";
 
 class Play extends Component {
   state = {
-    questions: [],
+    questions,
     currentQuestion: {},
     nextQuestion: {},
     previousQuestion: {},
@@ -18,11 +20,85 @@ class Play extends Component {
     hints: 5,
     fiftyFifty: 2,
     usedFiftyFifty: false,
-    time: {} 
+    time: {}
+  };
+
+  componentDidMount() {
+    const {
+      questions,
+      currentQuestion,
+      nextQuestion,
+      previousQuestion
+    } = this.state;
+    this.displayQuestions(
+      questions,
+      currentQuestion,
+      nextQuestion,
+      previousQuestion
+    );
+  }
+
+  displayQuestions = (
+    questions = this.state.questions,
+    currentQuestion,
+    nextQuestion,
+    previousQuestion
+  ) => {
+    let { currentQuestionIndex } = this.state;
+    if (!isEmpty(this.state.questions)) {
+      questions = this.state.questions;
+      currentQuestion = questions[currentQuestionIndex];
+      nextQuestion = questions[currentQuestionIndex + 1];
+      previousQuestion = questions[currentQuestionIndex - 1];
+
+      const answer = currentQuestion.answer;
+      this.setState({
+        currentQuestion,
+        nextQuestion,
+        previousQuestion,
+        answer
+      });
+    }
+  };
+
+  handleOptionClick = e => {
+    if (e.target.innerHTML.toLowerCase() === this.state.answer.toLowerCase()) {
+      this.correctAnswer();
+    } else {
+      this.wrongAnswer();
+    }
+  };
+
+  correctAnswer = () => {
+    M.toast({
+      html: "Bonne réponse",
+      classes: "toast-valid",
+      displayLength: 2000
+    });
+    this.setState(prevState => ({
+      score: prevState.score + 1,
+      correctAnswers: prevState.correctAnswers + 1,
+      currentQuestionIndex: prevState.currentQuestionIndex + 1,
+      numberOfAnsweredQuestion: prevState.numberOfAnsweredQuestion + 1
+    }));
+  };
+
+  wrongAnswer = () => {
+    navigator.vibrate(1000);
+    M.toast({
+      html: "Mauvaise réponse",
+      classes: "toast-invalid",
+      displayLength: 1000
+    });
+    this.setState(prevState => ({
+      wrongAnswers: prevState.wrongAnswers + 1,
+      currentQuestionIndex: prevState.currentQuestionIndex + 1,
+      numberOfAnsweredQuestion: prevState.numberOfAnsweredQuestion + 1
+    }));
   };
 
   render() {
-    console.log(questions);
+    const { currentQuestion } = this.state;
 
     return (
       <Fragment>
@@ -52,14 +128,22 @@ class Play extends Component {
               </span>
             </p>
           </div>
-          <h5>Google a été fondé en quelle année?</h5>
+          <h5>{currentQuestion.question}</h5>
           <div className="options-container">
-            <p className="option">1997</p>
-            <p className="option">1998</p>
+            <p onClick={this.handleOptionClick} className="option">
+              {currentQuestion.optionA}
+            </p>
+            <p onClick={this.handleOptionClick} className="option">
+              {currentQuestion.optionB}
+            </p>
           </div>
           <div className="options-container">
-            <p className="option">1999</p>
-            <p className="option">2000</p>
+            <p onClick={this.handleOptionClick} className="option">
+              {currentQuestion.optionC}
+            </p>
+            <p onClick={this.handleOptionClick} className="option">
+              {currentQuestion.optionD}
+            </p>
           </div>
           <div className="button-container">
             <button>Précédent</button>
