@@ -75,18 +75,74 @@ class Play extends Component {
     } else {
       setTimeout(() => {
         document.getElementById("wrong-sound").play();
-      }, 250);  
+      }, 250);
       this.wrongAnswer();
     }
   };
 
-  handleButtonClick = () => {
+  handleNextButtonClick = () => {
     this.playButtonSound();
-  }
+    if (this.state.nextQuestion !== undefined) {
+      this.setState(
+        prevState => ({
+          currentQuestionIndex: prevState.currentQuestionIndex + 1
+        }),
+        () => {
+          this.displayQuestions(
+            this.state.currentQuestion,
+            this.state.nextQuestion,
+            this.state.previousQuestion
+          );
+        }
+      );
+    }
+  };
+
+  handlePreviousButtonClick = () => {
+    this.playButtonSound();
+    if (this.state.previousQuestion !== undefined) {
+      this.setState(
+        prevState => ({
+          currentQuestionIndex: prevState.currentQuestionIndex - 1
+        }),
+        () => {
+          this.displayQuestions(
+            this.state.currentQuestion,
+            this.state.nextQuestion,
+            this.state.previousQuestion
+          );
+        }
+      );
+    }
+  };
+
+  handleQuitButton = () => {
+    this.playButtonSound();
+    if (window.confirm("Êtes-vous sûr de vouloir quitter?")) {
+      this.props.history.push("/");
+    }
+  };
+
+  handleButtonClick = e => {
+    switch (e.target.id) {
+      case "next-button":
+        this.handleNextButtonClick();
+        break;
+      case "previous-button":
+        this.handlePreviousButtonClick();
+        break;
+      case "quit-button":
+        this.handleQuitButton();
+        break;
+
+      default:
+        break;
+    }
+  };
 
   playButtonSound = () => {
     document.getElementById("button-sound").play();
-  }
+  };
 
   correctAnswer = () => {
     M.toast({
@@ -137,7 +193,11 @@ class Play extends Component {
   };
 
   render() {
-    const { currentQuestion, currentQuestionIndex, numberOfQuestions } = this.state;
+    const {
+      currentQuestion,
+      currentQuestionIndex,
+      numberOfQuestions
+    } = this.state;
 
     return (
       <Fragment>
@@ -164,7 +224,7 @@ class Play extends Component {
           <div>
             <p>
               <span className="left" style={{ float: "left" }}>
-                { currentQuestionIndex + 1 } sur {numberOfQuestions}
+                {currentQuestionIndex + 1} sur {numberOfQuestions}
               </span>
               <span className="right" style={{ float: "right" }}>
                 2:15
@@ -190,9 +250,15 @@ class Play extends Component {
             </p>
           </div>
           <div className="button-container">
-            <button onClick={this.handleButtonClick}>Précédent</button>
-            <button onClick={this.handleButtonClick}>Suivant</button>
-            <button onClick={this.handleButtonClick}>Quitter</button>
+            <button id="previous-button" onClick={this.handleButtonClick}>
+              Précédent
+            </button>
+            <button id="next-button" onClick={this.handleButtonClick}>
+              Suivant
+            </button>
+            <button id="quit-button" onClick={this.handleButtonClick}>
+              Quitter
+            </button>
           </div>
         </div>
       </Fragment>
