@@ -20,6 +20,17 @@
         top: -3px;
     }
 
+    .lifeline-icon {
+        color: $green;
+        cursor: pointer;
+    }
+
+    .lifeline-icon:hover {
+        background: none;
+        color: darken($tomato, 10%);
+        cursor: pointer;
+    }
+
     h5 {
         font-size: 1.4rem;
         margin-bottom: $lg;

@@ -23,6 +23,7 @@ class Play extends Component {
     hints: 5,
     fiftyFifty: 2,
     usedFiftyFifty: false,
+    previousRandomNumbers: [],
     time: {}
   };
 
@@ -55,13 +56,19 @@ class Play extends Component {
       previousQuestion = questions[currentQuestionIndex - 1];
 
       const answer = currentQuestion.answer;
-      this.setState({
-        currentQuestion,
-        nextQuestion,
-        previousQuestion,
-        numberOfQuestions: questions.length,
-        answer
-      });
+      this.setState(
+        {
+          currentQuestion,
+          nextQuestion,
+          previousQuestion,
+          numberOfQuestions: questions.length,
+          answer,
+          previousRandomNumbers: []
+        },
+        () => {
+          this.showOptions();
+        }
+      );
     }
   };
 
@@ -192,11 +199,56 @@ class Play extends Component {
     );
   };
 
+  showOptions = () => {
+    const options = Array.from(document.querySelectorAll(".option"));
+
+    options.forEach(option => {
+      option.style.visibility = "visible";
+    });
+  };
+
+  handleHints = () => {
+    if (this.state.hints > 0) {
+      const options = Array.from(document.querySelectorAll(".option"));
+      let indexOfAnswer;
+
+      options.forEach((option, index) => {
+        if (
+          option.innerHTML.toLowerCase() === this.state.answer.toLowerCase()
+        ) {
+          indexOfAnswer = index;
+        }
+      });
+      while (true) {
+        const randomNumber = Math.round(Math.random() * 3);
+        if (
+          randomNumber !== indexOfAnswer &&
+          !this.state.previousRandomNumbers.includes(randomNumber)
+        ) {
+          options.forEach((option, index) => {
+            if (index === randomNumber) {
+              option.style.visibility = "hidden";
+              this.setState(prevState => ({
+                hints: prevState.hints - 1,
+                previousRandomNumbers: prevState.previousRandomNumbers.concat(
+                  randomNumber
+                )
+              }));
+            }
+          });
+          break;
+        }
+        if (this.state.previousRandomNumbers.length >= 3) break;
+      }
+    }
+  };
+
   render() {
     const {
       currentQuestion,
       currentQuestionIndex,
-      numberOfQuestions
+      numberOfQuestions,
+      hints
     } = this.state;
 
     return (
@@ -217,8 +269,11 @@ class Play extends Component {
               <span className="lifeline">2</span>
             </p>
             <p>
-              <span className="mdi mdi-lightbulb-on mdi-24px lifeline-icon"></span>
-              <span className="lifeline">5</span>
+              <span
+                onClick={this.handleHints}
+                className="mdi mdi-lightbulb-on mdi-24px lifeline-icon"
+              ></span>
+              <span className="lifeline">{hints}</span>
             </p>
           </div>
           <div>
